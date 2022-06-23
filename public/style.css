@@ -1,3 +1,17 @@
-body{
-    background-color: gray;
+*{
+    margin:0;
+    padding: 0;
 }
+
+body{
+    background-color: #0f2b46;
+    color: #ffffff;
+}
+
+#welcome{
+    text-align: left;
+    padding-left: 2%;
+    margin-top: 2%;
+    font-size: 1.5vw;
+}
+
