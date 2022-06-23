@@ -8,7 +8,11 @@
     <link type="text/css" rel="stylesheet" href="http://localhost/public/style.css">
 </head>
 <body>
-    <h1></h1>
+    <% if(firstAccess){  %>
+       <h1>Benvenuto <%= name %></h1>
+    <% }else{ %>
+        <h1>Bentornato <%= name %></h1>
+    <% } %>
     <form action="/login/disconnect" method="post">
         <button type="submit">Disconnect</button>
     </form>

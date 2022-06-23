@@ -19,9 +19,11 @@ router.post("/", (req,res)=>{
                 db.collection("users").insertOne({
                     id:id,
                     name:name,
-                    surname:surname
+                    surname:surname,
+                    firstAccess:true
                 })
                 req.session.logged = true
+                req.session.userId = id
                 res.redirect("http://localhost")
             }else{
                 res.render("register",{idAlreadyUsed:true})

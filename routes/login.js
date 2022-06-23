@@ -20,7 +20,9 @@ router.post("/", (req,res)=>{
             else{
                 if(data!=null){
                     req.session.logged = true
+                    req.session.userId = id
                     res.redirect("http://localhost")
+                    db.collection("users").updateOne({id:id}, {$set:{firstAccess:false}})
                 }else{
                     req.session.destroy()
                     res.redirect("http://localhost/login")

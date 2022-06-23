@@ -36,10 +36,20 @@ app.use("/register", registerRouter)
 
 // HOME
 
-const auth = require("./auth")
+const auth = require("./auth");
+const { MongoClient } = require("mongodb");
 
 app.get("/",auth,(req,res)=>{
-    res.render("home",{})
+    const id = req.session.userId
+    MongoClient.connect(dbUrl, (err,database)=>{
+        if(err) res.sendStatus(500)
+        const db = database.db(dbName)
+        db.collection("users").findOne({id:id}, (err,data)=>{
+            if(err) res.sendStatus(500)
+            res.render("home",data)
+            db.collection("users").updateOne({id:id}, {$set:{firstAccess:false}})
+        })
+    })
 })
 
 app.get("/home",(req,res)=>{
