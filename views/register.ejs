@@ -18,7 +18,7 @@
                 <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
-                <input name="id" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
                 <label for="floatingPassword">Password</label>
             </div>
         </div>
@@ -33,9 +33,9 @@
             </p>
         </div>
     </form>
-    <% if(idAlreadyUsed){ %>
+    <% if(emailAlreadyUsed){ %>
         <div class="alert alert-danger error" role="alert">
-            <p>Id già in uso</p>
+            <p>Email già registrata</p>
         </div>
     <% } %>
     <% if(!(campiOk)){ %>

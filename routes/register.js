@@ -3,35 +3,38 @@ const router = express.Router()
 const {MongoClient} = require("mongodb")
 const dbUrl = "mongodb://localhost:27017"
 const dbName = "pswM"
+const uuid = require("uuid")
 
 router.get("/", (req,res)=>{
-    res.render("register",{idAlreadyUsed:false,campiOk:true})
+    res.render("register",{emailAlreadyUsed:false,campiOk:true})
 })
 
 router.post("/", (req,res)=>{
     MongoClient.connect(dbUrl, (err,database)=>{
         if(err) res.sendStatus(500)
         const db = database.db(dbName)
-        const {name,surname,email,id} = req.body
-        db.collection("users").findOne({id:id}, (err,data)=>{
+        const {name,surname,email,password} = req.body
+        db.collection("users").findOne({email:email}, (err,data)=>{
             if(err) res.sendStatus(500)
             if(data==null||data=={}||data==undefined){
-                if(id!=null&&name!=null&&surname!=null&&email!=null){
+                if(password!=null&&name!=""&&surname!=""&&email!=""){
+                    const id = uuid.v4()
                     db.collection("users").insertOne({
-                        id:id,
+                        password:password,
                         name:name,
                         surname:surname,
                         email:email,
-                        firstAccess:true
+                        firstAccess:true,
+                        id: id
                     })
                     req.session.logged = true
                     req.session.userId = id
                     res.redirect("http://localhost")
                 }else{
-                    res.render("register",{idAlreadyUsed:false,campiOk:false})
+                    res.render("register",{emailAlreadyUsed:false,campiOk:false})
                 }
             }else{
-                res.render("register",{idAlreadyUsed:true,campiOk:true})
+                res.render("register",{emailAlreadyUsed:true,campiOk:true})
             }
         })
     })

@@ -10,19 +10,19 @@ router.get("/", (req,res)=>{
 })
 
 router.post("/", (req,res)=>{
-    const {id} = req.body
+    const {email, password} = req.body
     MongoClient.connect(dbUrl, (err,database)=>{
         if(err) res.sendStatus(500)
         const db = database.db(dbName)
 
-        db.collection("users").findOne({id:id}, (err,data)=>{
+        db.collection("users").findOne({email:email,password:password}, (err,data)=>{
             if(err) res.sendStatus(500)
             else{
                 if(data!=null){
                     req.session.logged = true
-                    req.session.userId = id
+                    req.session.userId = data.id
                     res.redirect("http://localhost")
-                    db.collection("users").updateOne({id:id}, {$set:{firstAccess:false}})
+                    db.collection("users").updateOne({email:email}, {$set:{firstAccess:false}})
                 }else{
                     req.session.destroy()
                     res.redirect("http://localhost/login")

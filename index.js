@@ -41,6 +41,7 @@ const { MongoClient } = require("mongodb");
 
 app.get("/",auth,(req,res)=>{
     const id = req.session.userId
+    console.log(id)
     MongoClient.connect(dbUrl, (err,database)=>{
         if(err) res.sendStatus(500)
         const db = database.db(dbName)
