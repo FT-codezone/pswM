@@ -14,5 +14,9 @@
         <input type="text" name="password" id="" placeholder="password">
         <button type="submit">Invia</button>
     </form>
+    <p>Nuovo utente? <a href="http://localhost/register">Registrati!</a> </p>
+    <% if(pe){ %>
+        <p>Credenziali errate</p>
+    <% } %>
 </body>
 </html>

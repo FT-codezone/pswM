@@ -4,6 +4,7 @@ const {MongoClient} = require("mongodb")
 const dbUrl = "mongodb://localhost:27017"
 const dbName = "pswM"
 const uuid = require("uuid")
+const bcrypt = require("bcrypt")
 
 router.get("/", (req,res)=>{
     res.render("register",{emailAlreadyUsed:false,campiOk:true})
@@ -14,13 +15,14 @@ router.post("/", (req,res)=>{
         if(err) res.sendStatus(500)
         const db = database.db(dbName)
         const {name,surname,email,password} = req.body
-        db.collection("users").findOne({email:email}, (err,data)=>{
+        db.collection("users").findOne({email:email}, async(err,data)=>{
             if(err) res.sendStatus(500)
             if(data==null||data=={}||data==undefined){
                 if(password!=null&&name!=""&&surname!=""&&email!=""){
                     const id = uuid.v4()
+                    const cryptedpsw = await bcrypt.hash(password,10)
                     db.collection("users").insertOne({
-                        password:password,
+                        password:cryptedpsw,
                         name:name,
                         surname:surname,
                         email:email,

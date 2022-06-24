@@ -5,11 +5,13 @@ const MongoStore = require('connect-mongo');
 const dbUrl = "mongodb://localhost:27017"
 const dbName = "pswM"
 const uuid = require("uuid")
+const helmet = require("helmet")
 const port = 80
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
+app.use(helmet())
 
 app.use(session({
     secret: "cat",
@@ -30,28 +32,11 @@ app.set("view engine", "ejs")
 const loginRouter = require("./routes/login")
 const registerRouter = require("./routes/register")
 const publicRouter = require("./routes/public")
+const homeRouter = require("./routes/home");
 app.use("/login", loginRouter)
 app.use("/public", publicRouter)
 app.use("/register", registerRouter)
-
-// HOME
-
-const auth = require("./auth");
-const { MongoClient } = require("mongodb");
-
-app.get("/",auth,(req,res)=>{
-    const id = req.session.userId
-    console.log(id)
-    MongoClient.connect(dbUrl, (err,database)=>{
-        if(err) res.sendStatus(500)
-        const db = database.db(dbName)
-        db.collection("users").findOne({id:id}, (err,data)=>{
-            if(err) res.sendStatus(500)
-            res.render("home",data)
-            db.collection("users").updateOne({id:id}, {$set:{firstAccess:false}})
-        })
-    })
-})
+app.use("/", homeRouter)
 
 app.get("/home",(req,res)=>{
     res.redirect("http://localhost/")
