@@ -18,4 +18,34 @@ router.get("/",auth,(req,res)=>{
     })
 })
 
+router.post("/addPsw", (req,res)=>{
+    const {site,psw} = req.body
+    MongoClient.connect(dbUrl, (err,database)=>{
+        if(err) res.sendStatus(500)
+        const db = database.db(dbName)
+        db.collection("users").findOne({id:req.session.userId}, (err,data)=>{
+            if(err) res.sendStatus(500)
+            for(i=0;i<data.data.length;i++){
+                if(data.data[i].site==site){
+                    res.send(`Il sito ha già una password registrata
+                        <script>
+                            setTimeout(() => {
+                                window.location.href="http://localhost/"
+                            }, 3000);
+                        </script>
+                    `)
+                }else{
+                    res.send(`Password salvata!
+                        <script>
+                            setTimeout(() => {
+                                window.location.href="http://localhost/"
+                            }, 3000);
+                        </script>
+                    `)
+                }
+            }
+        })
+    })
+})
+
 module.exports = router

@@ -27,7 +27,8 @@ router.post("/", (req,res)=>{
                         surname:surname,
                         email:email,
                         firstAccess:true,
-                        id: id
+                        id: id,
+                        data:[]
                     })
                     req.session.logged = true
                     req.session.userId = id

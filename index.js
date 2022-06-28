@@ -11,7 +11,10 @@ const port = 80
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
-app.use(helmet())
+
+// app.use(helmet({
+//     "script-src": ["self","http://localhost/public"]
+// }))
 
 app.use(session({
     secret: "cat",

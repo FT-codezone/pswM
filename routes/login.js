@@ -6,7 +6,9 @@ const dbName = "pswM"
 const bcrypt = require("bcrypt")
 
 router.get("/", (req,res)=>{
-    req.session.logged = false
+    if(req.session.logged){
+        res.redirect="http://localhost/"
+    }
     res.render("login",{pe:false})
 })
 
